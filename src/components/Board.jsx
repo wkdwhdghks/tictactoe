@@ -4,18 +4,15 @@ import { useState } from "react";
 
 export default function Board() {
   const [squares, setSquares] = useState(Array(9).fill(null));
-  const [toggle, setToggle] = useState(false);
+  const [toggle, setToggle] = useState(true);
+
+  const status = `Next player ${toggle ? "X" : "O"}`;
 
   const handleClick = (i) => {
     let newSquares = [...squares];
-    if (toggle === false) {
-      newSquares[i] = "X";
-      setToggle(true);
-    } else if (toggle === true) {
-      newSquares[i] = "O";
-      setToggle(false);
-    }
+    newSquares[i] = toggle ? "X" : "O";
     setSquares(newSquares);
+    setToggle((prev) => !prev);
   };
 
   const renderSquare = (i) => {
@@ -24,7 +21,7 @@ export default function Board() {
 
   return (
     <div>
-      <div className="status">Next Player: X</div>
+      <div className="status">{status}</div>
       <div className="board-row">
         {renderSquare(0)}
         {renderSquare(1)}
