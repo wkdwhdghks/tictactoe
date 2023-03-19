@@ -4,7 +4,7 @@ import Board from "./components/Board";
 
 export default function App() {
   const [history, setHistory] = useState([{ squares: Array(9).fill(null) }]);
-  const [toggle, setToggle] = useState(true);
+  const [xIsNext, setXIsNext] = useState(true);
   const [stepNumber, setStepNumber] = useState(0);
 
   const calculateWinner = (squares) => {
@@ -39,7 +39,7 @@ export default function App() {
   if (winner) {
     status = "winner: " + winner;
   } else {
-    status = `Next player: ${toggle ? "X" : "O"}`;
+    status = `Next player: ${xIsNext ? "X" : "O"}`;
   }
 
   const handleClick = (i) => {
@@ -51,9 +51,9 @@ export default function App() {
       return;
     }
 
-    newSquares[i] = toggle ? "X" : "O";
+    newSquares[i] = xIsNext ? "X" : "O";
     setHistory([...newHistory, { squares: newSquares }]);
-    setToggle((prev) => !prev);
+    setXIsNext((prev) => !prev);
     setStepNumber(newHistory.length);
   };
 
@@ -76,7 +76,7 @@ export default function App() {
 
   const jumpTo = (step) => {
     setStepNumber(step);
-    setToggle(step % 2 === 0);
+    setXIsNext(step % 2 === 0);
   };
 
   return (
