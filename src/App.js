@@ -5,6 +5,7 @@ import Board from "./components/Board";
 export default function App() {
   const [history, setHistory] = useState([{ squares: Array(9).fill(null) }]);
   const [toggle, setToggle] = useState(true);
+  const [stepNumber, setStepNumber] = useState(0);
 
   const calculateWinner = (squares) => {
     const lines = [
@@ -31,7 +32,7 @@ export default function App() {
     return null;
   };
 
-  const current = history[history.length - 1];
+  const current = history[stepNumber];
   const winner = calculateWinner(current.squares);
 
   let status;
@@ -42,15 +43,18 @@ export default function App() {
   }
 
   const handleClick = (i) => {
-    let newSquares = [...current.squares];
+    const newHistory = history.slice(0, stepNumber + 1);
+    const newCurrent = newHistory[newHistory.length - 1];
+    let newSquares = [...newCurrent.squares];
 
     if (calculateWinner(newSquares) || newSquares[i]) {
       return;
     }
 
     newSquares[i] = toggle ? "X" : "O";
-    setHistory([...history, { squares: newSquares }]);
+    setHistory([...newHistory, { squares: newSquares }]);
     setToggle((prev) => !prev);
+    setStepNumber(newHistory.length);
   };
 
   const moves = history.map((step, move) => {
@@ -58,10 +62,22 @@ export default function App() {
 
     return (
       <li key={move}>
-        <button>{desc}</button>
+        <button
+          className="move-button"
+          onClick={() => {
+            jumpTo(move);
+          }}
+        >
+          {desc}
+        </button>
       </li>
     );
   });
+
+  const jumpTo = (step) => {
+    setStepNumber(step);
+    setToggle(step % 2 === 0);
+  };
 
   return (
     <div className="game">
